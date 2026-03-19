@@ -288,6 +288,16 @@ async def test_email_schedule(
 if STATIC_DIR.exists():
     app.mount("/assets", StaticFiles(directory=STATIC_DIR / "assets"), name="assets")
 
+    @app.get("/health")
+    async def health():
+        """健康检查，用于验证服务是否正常"""
+        return {"status": "ok", "static": True}
+
+    @app.get("/")
+    async def serve_index():
+        """根路径返回前端首页"""
+        return FileResponse(STATIC_DIR / "index.html")
+
     @app.get("/{path:path}")
     async def serve_spa(path: str):
         """SPA 回退：非 API 请求返回 index.html"""
