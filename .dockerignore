@@ -1,0 +1,32 @@
+# Git
+.git
+.gitignore
+
+# 环境与密钥
+.env
+.env.*
+!.env.example
+
+# 构建产物与缓存
+node_modules
+**/node_modules
+frontend/dist
+frontend/node_modules
+backend/.venv
+**/__pycache__
+**/*.pyc
+**/*.pyo
+
+# 数据库（容器内重新创建）
+*.db
+
+# 文档与测试
+docs
+test
+*.md
+!README.md
+
+# IDE
+.idea
+.vscode
+.cursor

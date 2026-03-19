@@ -1,0 +1,24 @@
+# 小红书热点 Agent - 一键部署
+# 用法: docker compose up -d
+
+services:
+  xhs:
+    build: .
+    container_name: xhs-agent
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - TIKHUB_API_TOKEN=${TIKHUB_API_TOKEN}
+      - SMTP_HOST=${SMTP_HOST:-smtp.qq.com}
+      - SMTP_PORT=${SMTP_PORT:-465}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - SMTP_FROM=${SMTP_FROM}
+      - SMTP_USE_TLS=${SMTP_USE_TLS:-true}
+    volumes:
+      - xhs_data:/app/data
+
+volumes:
+  xhs_data:
