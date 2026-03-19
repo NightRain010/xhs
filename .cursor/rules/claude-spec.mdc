@@ -1,0 +1,32 @@
+---
+description: NL2SQL 项目核心规范 — 编写或修改代码时必须遵守
+alwaysApply: true
+---
+
+# 核心约束
+
+1. 所有数据库操作通过 SQLAlchemy ORM，禁止裸 SQL（除非 agent 生成给用户展示）
+2. 用户输入必须经过 Jieba 分词 + 意图校验后再进入 LangChain 流程
+3. API 必须有请求参数校验（Pydantic schema）
+4. 所有 AI 生成的 SQL 在执行前必须经过白名单校验（只允许 SELECT）
+5. DeepSeek 调用统一走 openai 兼容接口，base_url 配置在环境变量中
+6. 前端和后端每做一个功能都必须编写对应测试代码，并在提交前跑通测试
+7. 完成功能的新增、修改或删除后，必须同步更新对应的文档（`CLAUDE.md` 项目结构 / `.cursor/skills/` 模块文档），保持文档与代码一致
+
+# 数据库字符集规范
+
+- MySQL 全链路使用 `utf8mb4`，禁止出现 `latin1`
+- Docker 启动参数必须包含 `--character-set-client-handshake=FALSE` 和 `--init-connect=SET NAMES utf8mb4`
+- SQLAlchemy 连接串必须带 `?charset=utf8mb4` 参数
+- SQL 初始化脚本开头必须加 `SET NAMES utf8mb4;`
+- 新增数据库表必须指定 `DEFAULT CHARSET=utf8mb4`
+
+# 测试要求
+
+- **后端**：每个模块有对应测试文件（pytest），覆盖率 > 80%；新增 API、Agent、CRUD 等必须同步编写并跑通测试
+- **前端**：新增页面、组件或接口调用时，必须编写对应单元/集成测试（Vitest + Vue Test Utils），通过后再提交
+- 流程：先写/补测试 → 实现功能 → 跑通测试
+
+# 参考
+
+项目技术栈、目录结构、.env 模板见 `CLAUDE.md`；各模块开发指南见 `.cursor/skills/` 下对应 Skill 文档（索引见 CLAUDE.md 底部）。
